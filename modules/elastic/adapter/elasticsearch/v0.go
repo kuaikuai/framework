@@ -1528,7 +1528,8 @@ func (c *ESAPIV0) Forcemerge(indexName string, maxCount int) error {
 	indexName = util.UrlEncode(indexName)
 
 	url := fmt.Sprintf("%s/%s/_forcemerge?max_num_segments=%v", c.GetEndpoint(), indexName, maxCount)
-	_, err := c.Request(nil, util.Verb_POST, url, nil)
+	ctx, _ := context.WithTimeout(context.Background(), time.Duration(1200)*time.Second)
+	_, err := c.Request(ctx, util.Verb_POST, url, nil)
 	if err != nil {
 		return err
 	}
