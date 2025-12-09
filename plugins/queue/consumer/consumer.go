@@ -555,8 +555,10 @@ READ_DOCS:
 
 	//log.Error("read docs: ",qConfig.Name)
 
-	//TODO
-	//consumerInstance.ResetOffset(queue.ConvertOffset(offset))
+    // Since franz-go might lose the offset, we need to manually reset the consumer instance's offset.
+    // Here, queue.ConvertOffset(offset) is used to convert the offset into the appropriate format, 
+    // and ResetOffset is called to reset it.
+	consumerInstance.ResetOffset(queue.ConvertOffset(offset))
 	EOF := false
 	for {
 		if global.ShuttingDown() || ctx.IsCanceled() || ctx.IsFailed() || parentContext != nil && (parentContext.IsFailed() || parentContext.IsCanceled()) {
